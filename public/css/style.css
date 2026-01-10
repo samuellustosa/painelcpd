@@ -8,8 +8,8 @@
     transition: 0.3s;
 }
 
-.btn-primary { background-color: #3182ce !important; } /* Azul Online */
-.btn-secondary { background-color: #a0aec0 !important; } /* Cinza Offline */
+.btn-primary { background-color: #00ff40 !important; } /* verdi Online */
+.btn-secondary { background-color: #ff0000 !important; } /* vermei Offline */
 
 aside button {
     font-weight: bold;

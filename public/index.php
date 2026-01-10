@@ -3,11 +3,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\Database\Connection;
 
 $db = Connection::getInstance();
-// Buscando dados do banco painelcpd [cite: 39, 40]
+// Buscando dados do banco painelcpd
 $stmt = $db->query("SELECT * FROM terminais ORDER BY setor, id_caixa");
 $terminais_brutos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Agrupa por setor para criar as divisões na tela [cite: 22]
+// Agrupa por setor para criar as divisões na tela
 $setores = [];
 foreach ($terminais_brutos as $t) {
     $setores[$t['setor']][] = $t;
@@ -25,7 +25,6 @@ foreach ($terminais_brutos as $t) {
         .pdv-btn { width: 100px; margin: 5px; font-weight: bold; font-size: 13px; transition: 0.3s; }
         .setor-header { background: #eee; padding: 5px; margin-top: 20px; text-align: center; font-weight: bold; color: #555; }
         .header-red { background: #d9534f; color: white; text-align: center; padding: 10px; margin-bottom: 10px; font-weight: bold; }
-        
         .selecionado { border: 3px solid #000 !important; }
     </style>
 </head>
@@ -55,12 +54,12 @@ foreach ($terminais_brutos as $t) {
         </div>
 
         <div class="col-md-2 sidebar text-center">
-            
-            
             <button class="btn btn-primary w-100 mb-2" onclick="comando('desligar')">Desligar</button>
             <button class="btn btn-primary w-100 mb-2" onclick="comando('reboot')">Reiniciar</button>
-            <button class="btn btn-primary w-100 mb-2">Acessar VNC</button>
-            <button class="btn btn-primary w-100 mb-2">Acessar SSH</button>
+            
+            <button class="btn btn-primary w-100 mb-2" onclick="acessarVNC()">Acessar VNC</button>
+            <button class="btn btn-primary w-100 mb-2" onclick="acessarSSH()">Acessar SSH</button>
+            
             <button class="btn btn-primary w-100 mb-2 border-danger" onclick="comando('reiniciar_app')">Reiniciar APP</button>
             
             <div class="mt-5">
@@ -75,9 +74,7 @@ foreach ($terminais_brutos as $t) {
     let selecionado = null;
 
     $(document).ready(function() {
-        // Inicia o monitoramento de status 
         verificarStatus();
-        // Atualiza a cada 10 segundos
         setInterval(verificarStatus, 10000);
     });
 
@@ -87,12 +84,10 @@ foreach ($terminais_brutos as $t) {
         selecionado = $(btn).data();
     }
 
-    // Função de monitoramento em tempo real
     function verificarStatus() {
         $('.pdv-btn').each(function() {
             const btn = $(this);
             const ip = btn.data('ip');
-
             $.get('check_status.php', { ip: ip }, function(status) {
                 if (status.trim() === 'online') {
                     btn.removeClass('btn-secondary').addClass('btn-primary'); 
@@ -102,8 +97,53 @@ foreach ($terminais_brutos as $t) {
             });
         });
     }
-    
-    // Envio de comandos via AJAX para o Controller
+
+    // Ajuste na função acessarSSH do seu index.php
+    function acessarSSH() {
+        if(!selecionado) return alert("Selecione um PDV primeiro!");
+        
+        let senha = "";
+        let usuario = "";
+
+        // Define usuário e senha seguindo a lógica do seu PainelController.php
+        if (selecionado.arq === 'x86') {
+            usuario = "root";
+            senha = "1";
+        } else {
+            usuario = "suporte"; 
+            const data = new Date();
+            const dia = data.getDate();
+            const mes = data.getMonth() + 1;
+            const somaFinal = parseInt("" + dia + mes) + parseInt(selecionado.id);
+            senha = "pdv@" + somaFinal;
+        }
+        
+        // Copia a senha para a área de transferência
+        navigator.clipboard.writeText(senha).then(() => {
+            // Incluindo o usuario@ no link para o PuTTY abrir direto no prompt de senha
+            window.location.href = "ssh://" + usuario + "@" + selecionado.ip.trim();
+        }).catch(err => {
+            console.error("Erro ao copiar senha: ", err);
+        });
+    }
+
+    // Ajuste na função acessarVNC para garantir IP limpo
+    function acessarVNC() {
+        if(!selecionado) return alert("Selecione um PDV primeiro!");
+        
+        let senha = "";
+        if (selecionado.arq === 'x86') {
+            senha = "1"; 
+        } else {
+            const data = new Date();
+            const num = "" + data.getDate() + (data.getMonth() + 1);
+            senha = "pdv@" + (parseInt(num) + parseInt(selecionado.id));
+        }
+        
+        navigator.clipboard.writeText(senha);
+        // Envia apenas o IP limpo para o script de limpeza (LimparLink.bat) processar
+        window.location.href = "vnc://" + selecionado.ip.trim();
+    }
     function comando(tipo) {
         if(!selecionado) return alert("Selecione um PDV primeiro!");
 
