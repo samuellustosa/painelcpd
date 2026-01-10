@@ -21,16 +21,20 @@ class PainelController {
 
         return $terminal->enviarComando($ip, $user, $pass, $comando);
     }
+   
+
 
     private function getComandoLinux($arq, $acao) {
         $comandos = [
             'x86' => [
                 'reiniciar_app' => 'it-restart-application.sh', 
-                'reboot' => 'reboot' 
+                'reboot'        => 'reboot',                   
+                'desligar'      => 'poweroff'                  
             ],
             'x64' => [
-                'reiniciar_app' => '', 
-                'reboot' => 'sudo init 6' 
+                'reiniciar_app' => 'systemctl restart webpdv', 
+                'reboot'        => 'sudo init 6',              
+                'desligar'      => 'sudo shutdown -h now'     
             ]
         ];
         return $comandos[$arq][$acao];

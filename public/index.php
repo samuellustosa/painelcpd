@@ -17,7 +17,7 @@ foreach ($terminais_brutos as $t) {
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Painel WebPDV</title>
+    <title>Painel CPD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .grid-pdv { background: #fff; min-height: 100vh; padding-bottom: 50px; }
@@ -25,7 +25,7 @@ foreach ($terminais_brutos as $t) {
         .pdv-btn { width: 100px; margin: 5px; font-weight: bold; font-size: 13px; transition: 0.3s; }
         .setor-header { background: #eee; padding: 5px; margin-top: 20px; text-align: center; font-weight: bold; color: #555; }
         .header-red { background: #d9534f; color: white; text-align: center; padding: 10px; margin-bottom: 10px; font-weight: bold; }
-        /* Destaque para PDV selecionado */
+        
         .selecionado { border: 3px solid #000 !important; }
     </style>
 </head>
@@ -34,7 +34,7 @@ foreach ($terminais_brutos as $t) {
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-10 grid-pdv">
-            <div class="header-red">Painel de Controle WebPDV</div>
+            <div class="header-red">Painel CPD</div>
             
             <?php foreach ($setores as $nome_setor => $caixas): ?>
                 <div class="setor-header"><?= $nome_setor ?></div>
@@ -46,7 +46,7 @@ foreach ($terminais_brutos as $t) {
                                 data-id="<?= $pdv['id_caixa'] ?>" 
                                 data-ip="<?= $pdv['ip_address'] ?>"
                                 data-arq="<?= $pdv['arquitetura'] ?>">
-                            caixa <?= str_pad($pdv['id_caixa'], 2, '0', STR_PAD_LEFT) ?> <br>
+                            PDV <?= str_pad($pdv['id_caixa'], 2, '0', STR_PAD_LEFT) ?> <br>
                             <small><?= $pdv['arquitetura'] ?></small>
                         </button>
                     <?php endforeach; ?>
@@ -55,7 +55,7 @@ foreach ($terminais_brutos as $t) {
         </div>
 
         <div class="col-md-2 sidebar text-center">
-            <div class="mb-4 text-start"><input type="checkbox"> <small>visualizar por pdv</small></div>
+            
             
             <button class="btn btn-primary w-100 mb-2" onclick="comando('desligar')">Desligar</button>
             <button class="btn btn-primary w-100 mb-2" onclick="comando('reboot')">Reiniciar</button>
@@ -64,7 +64,7 @@ foreach ($terminais_brutos as $t) {
             <button class="btn btn-primary w-100 mb-2 border-danger" onclick="comando('reiniciar_app')">Reiniciar APP</button>
             
             <div class="mt-5">
-                <img src="https://logodownload.org/wp-content/uploads/2020/02/grupo-mateus-logo.png" width="120">
+                <img src="/images/logo.jpg" width="120">
             </div>
         </div>
     </div>
@@ -75,9 +75,9 @@ foreach ($terminais_brutos as $t) {
     let selecionado = null;
 
     $(document).ready(function() {
-        // Inicia o monitoramento de status [cite: 50]
+        // Inicia o monitoramento de status 
         verificarStatus();
-        // Atualiza a cada 30 segundos conforme requisito de performance [cite: 35]
+        // Atualiza a cada 30 segundos conforme requisito de performance 
         setInterval(verificarStatus, 30000);
     });
 
@@ -87,7 +87,7 @@ foreach ($terminais_brutos as $t) {
         selecionado = $(btn).data();
     }
 
-    // Função de monitoramento em tempo real (Ping) [cite: 5, 23, 51]
+    // Função de monitoramento em tempo real
     function verificarStatus() {
         $('.pdv-btn').each(function() {
             const btn = $(this);
@@ -95,15 +95,15 @@ foreach ($terminais_brutos as $t) {
 
             $.get('check_status.php', { ip: ip }, function(status) {
                 if (status.trim() === 'online') {
-                    btn.removeClass('btn-secondary').addClass('btn-primary'); // Azul = Online [cite: 22, 51]
+                    btn.removeClass('btn-secondary').addClass('btn-primary'); 
                 } else {
-                    btn.removeClass('btn-primary').addClass('btn-secondary'); // Cinza = Offline [cite: 22, 51]
+                    btn.removeClass('btn-primary').addClass('btn-secondary'); 
                 }
             });
         });
     }
     
-    // Envio de comandos via AJAX para o Controller [cite: 52, 54]
+    // Envio de comandos via AJAX para o Controller
     function comando(tipo) {
         if(!selecionado) return alert("Selecione um PDV primeiro!");
 

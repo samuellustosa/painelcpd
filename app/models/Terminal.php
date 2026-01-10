@@ -6,15 +6,16 @@ use phpseclib3\Net\SSH2;
 class Terminal {
     // Regra de Negócio: Senha Dinâmica x64 
     public function gerarSenhaDinamica($id_pdv) {
-        $dia = date('d');
-        $mes = date('m');
-        
-        // Concatenação: Dia + Mês
-        $concatenacao = (int)($dia . $mes); 
-        // Soma: Concatenação + ID_PDV 
-        $soma = $concatenacao + (int)$id_pdv; 
-        
-        return "pdv@" . $soma; // Senha Final
+        $dia = (int) date('d'); 
+        $mes = (int) date('m'); 
+
+        // Concatena dia + mês sem zeros à esquerda
+        $numero = $dia . $mes; 
+
+        // Soma com o PDV
+        $somaFinal = (int)$numero + (int)$id_pdv;
+
+        return "pdv@" . $somaFinal;
     }
 
     // Execução de Comandos via SSH (Porta 22)
@@ -26,9 +27,10 @@ class Terminal {
         return $ssh->exec($comando);
     }
 
-    // Status visual via ICMP (Ping) [cite: 5, 23]
+    // Status visual via ICMP (Ping)
     public function verificarStatus($ip) {
-        $ping = exec("ping -c 1 -W 1 " . escapeshellarg($ip), $outcome, $status);
-        return ($status === 0) ? 'online' : 'offline';
-    }
+
+    $ping = exec("ping -n 1 -w 1000 " . escapeshellarg($ip), $outcome, $status);
+    return ($status === 0) ? 'online' : 'offline';
+}
 }
