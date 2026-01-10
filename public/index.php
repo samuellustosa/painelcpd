@@ -77,8 +77,8 @@ foreach ($terminais_brutos as $t) {
     $(document).ready(function() {
         // Inicia o monitoramento de status 
         verificarStatus();
-        // Atualiza a cada 30 segundos conforme requisito de performance 
-        setInterval(verificarStatus, 30000);
+        // Atualiza a cada 10 segundos
+        setInterval(verificarStatus, 10000);
     });
 
     function selecionarPDV(btn) {
