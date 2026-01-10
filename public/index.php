@@ -98,14 +98,12 @@ foreach ($terminais_brutos as $t) {
         });
     }
 
-    // Ajuste na função acessarSSH do seu index.php
     function acessarSSH() {
         if(!selecionado) return alert("Selecione um PDV primeiro!");
         
         let senha = "";
         let usuario = "";
 
-        // Define usuário e senha seguindo a lógica do seu PainelController.php
         if (selecionado.arq === 'x86') {
             usuario = "root";
             senha = "1";
@@ -120,14 +118,12 @@ foreach ($terminais_brutos as $t) {
         
         // Copia a senha para a área de transferência
         navigator.clipboard.writeText(senha).then(() => {
-            // Incluindo o usuario@ no link para o PuTTY abrir direto no prompt de senha
             window.location.href = "ssh://" + usuario + "@" + selecionado.ip.trim();
         }).catch(err => {
             console.error("Erro ao copiar senha: ", err);
         });
     }
 
-    // Ajuste na função acessarVNC para garantir IP limpo
     function acessarVNC() {
         if(!selecionado) return alert("Selecione um PDV primeiro!");
         
