@@ -3,11 +3,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\Database\Connection;
 
 $db = Connection::getInstance();
-// Buscando dados do banco painelcpd
 $stmt = $db->query("SELECT * FROM terminais ORDER BY setor, id_caixa");
 $terminais_brutos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Agrupa por setor para criar as divisões na tela
 $setores = [];
 foreach ($terminais_brutos as $t) {
     $setores[$t['setor']][] = $t;
@@ -19,13 +17,20 @@ foreach ($terminais_brutos as $t) {
     <meta charset="UTF-8">
     <title>Painel CPD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .grid-pdv { background: #fff; min-height: 100vh; padding-bottom: 50px; }
         .sidebar { background: #f8f9fa; border-left: 1px solid #ddd; height: 100vh; position: fixed; right: 0; top: 0; padding: 20px; z-index: 1000; }
-        .pdv-btn { width: 100px; margin: 5px; font-weight: bold; font-size: 13px; transition: 0.3s; }
+        .pdv-btn { width: 100px; margin: 5px; font-weight: bold; font-size: 13px; transition: 0.3s; cursor: pointer; }
         .setor-header { background: #eee; padding: 5px; margin-top: 20px; text-align: center; font-weight: bold; color: #555; }
         .header-red { background: #d9534f; color: white; text-align: center; padding: 10px; margin-bottom: 10px; font-weight: bold; }
-        .selecionado { border: 3px solid #000 !important; }
+        
+        /* Cores originais */
+        .btn-primary { background-color: #0d6efd !important; border-color: #0d6efd !important; } 
+        .btn-secondary { background-color: #6c757d !important; border-color: #6c757d !important; }
+        
+        /* Destaque da seleção */
+        .selecionado { border: 4px solid #000 !important; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -56,10 +61,8 @@ foreach ($terminais_brutos as $t) {
         <div class="col-md-2 sidebar text-center">
             <button class="btn btn-primary w-100 mb-2" onclick="comando('desligar')">Desligar</button>
             <button class="btn btn-primary w-100 mb-2" onclick="comando('reboot')">Reiniciar</button>
-            
             <button class="btn btn-primary w-100 mb-2" onclick="acessarVNC()">Acessar VNC</button>
             <button class="btn btn-primary w-100 mb-2" onclick="acessarSSH()">Acessar SSH</button>
-            
             <button class="btn btn-primary w-100 mb-2 border-danger" onclick="comando('reiniciar_app')">Reiniciar APP</button>
             
             <div class="mt-5">
@@ -73,15 +76,14 @@ foreach ($terminais_brutos as $t) {
 <script>
     let selecionado = null;
 
-    $(document).ready(function() {
-        verificarStatus();
-        setInterval(verificarStatus, 10000);
-    });
-
     function selecionarPDV(btn) {
+        // Remove a borda de todos e coloca apenas no clicado
         $('.pdv-btn').removeClass('selecionado');
         $(btn).addClass('selecionado');
+        
+        // Salva os dados do PDV clicado
         selecionado = $(btn).data();
+        console.log("PDV Selecionado:", selecionado);
     }
 
     function verificarStatus() {
@@ -98,64 +100,103 @@ foreach ($terminais_brutos as $t) {
         });
     }
 
+    $(document).ready(function() {
+        verificarStatus();
+        setInterval(verificarStatus, 10000);
+    });
+
+    // Funções de acesso e comando com SweetAlert2
     function acessarSSH() {
-        if(!selecionado) return alert("Selecione um PDV primeiro!");
+        if(!selecionado) return Swal.fire('Atenção', 'Selecione um PDV primeiro!', 'warning');
         
         let senha = "";
-        let usuario = "";
-
+        let usuario = (selecionado.arq === 'x86') ? "root" : "suporte";
+        
         if (selecionado.arq === 'x86') {
-            usuario = "root";
             senha = "1";
         } else {
-            usuario = "suporte"; 
             const data = new Date();
-            const dia = data.getDate();
-            const mes = data.getMonth() + 1;
-            const somaFinal = parseInt("" + dia + mes) + parseInt(selecionado.id);
+            const somaFinal = parseInt("" + data.getDate() + (data.getMonth() + 1)) + parseInt(selecionado.id);
             senha = "pdv@" + somaFinal;
         }
         
-        // Copia a senha para a área de transferência
         navigator.clipboard.writeText(senha).then(() => {
-            window.location.href = "ssh://" + usuario + "@" + selecionado.ip.trim();
-        }).catch(err => {
-            console.error("Erro ao copiar senha: ", err);
+            Swal.fire({ icon: 'success', title: 'Senha Copiada!', text: 'A senha está no CTRL+V.', timer: 1500, showConfirmButton: false });
+            window.location.href = "ssh://" + usuario + "@" + selecionado.ip;
         });
     }
 
     function acessarVNC() {
-        if(!selecionado) return alert("Selecione um PDV primeiro!");
+        if(!selecionado) return Swal.fire('Atenção', 'Selecione um PDV primeiro!', 'warning');
         
         let senha = "";
+
         if (selecionado.arq === 'x86') {
             senha = "1"; 
         } else {
             const data = new Date();
+
             const num = "" + data.getDate() + (data.getMonth() + 1);
             senha = "pdv@" + (parseInt(num) + parseInt(selecionado.id));
         }
         
-        navigator.clipboard.writeText(senha);
-        // Envia apenas o IP limpo para o script de limpeza (LimparLink.bat) processar
-        window.location.href = "vnc://" + selecionado.ip.trim();
+        // Copia para a área de transferência e avisa o utilizador
+        navigator.clipboard.writeText(senha).then(() => {
+            Swal.fire({ 
+                icon: 'success', 
+                title: 'Senha VNC Copiada!', 
+                text: 'A senha (' + senha + ') já está no seu CTRL+V.', 
+                timer: 2000, 
+                showConfirmButton: false 
+            });
+            
+            // Abre o TightVNC após a cópia
+            setTimeout(() => {
+                window.location.href = "vnc://" + selecionado.ip.trim();
+            }, 500);
+        });
     }
-    function comando(tipo) {
-        if(!selecionado) return alert("Selecione um PDV primeiro!");
 
-        if(confirm("Deseja realmente enviar o comando '" + tipo + "' para o caixa " + selecionado.id + "?")) {
+    function comando(tipo) {
+    if(!selecionado) return Swal.fire('Atenção', 'Selecione um PDV primeiro!', 'warning');
+
+    Swal.fire({
+        title: 'Confirmar',
+        text: "Enviar '" + tipo + "' para o PDV " + selecionado.id + "?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // EXIBE A TELA DE "EXECUTANDO..."
+            Swal.fire({ 
+                title: 'Executando...', 
+                text: 'Aguarde o retorno do terminal SSH',
+                allowOutsideClick: false, 
+                didOpen: () => { Swal.showLoading(); } 
+            });
+
+            // ENVIA PARA O PHP
             $.post('executar_comando.php', {
-                id: selecionado.id,
-                ip: selecionado.ip,
-                arquitetura: selecionado.arq,
+                id: selecionado.id, 
+                ip: selecionado.ip, 
+                arquitetura: selecionado.arq, 
                 comando: tipo
             }, function(data) {
-                alert("Servidor responde: " + data.mensagem);
+                // ESTA PARTE FECHA O "EXECUTANDO..." E MOSTRA O RESULTADO
+                Swal.fire({
+                    title: 'Resposta do Servidor',
+                    text: data.mensagem,
+                    icon: (data.status === 'sucesso') ? 'success' : 'error'
+                });
             }, 'json').fail(function() {
-                alert("Erro ao conectar com o servidor de comandos.");
+                // FECHA SE HOUVER ERRO DE REDE
+                Swal.fire('Erro', 'Falha na comunicação com o servidor PHP.', 'error');
             });
         }
-    }
+    });
+}
 </script>
 </body>
 </html>
