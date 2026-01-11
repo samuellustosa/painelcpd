@@ -32,6 +32,7 @@ uasort($setores, function($a, $b) {
     <link rel="icon" type="image/png" href="images/logopainel.ico">
     <link rel="manifest" href="manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* Ajustes de Proporção e Dark Mode */
@@ -95,6 +96,10 @@ uasort($setores, function($a, $b) {
         </div>
 
         <div class="sidebar text-center">
+            <a href="fechamento.php" class="btn btn-warning w-100 mb-4 fw-bold text-dark">
+                <i class="fas fa-robot me-1"></i> FECHAMENTO
+            </a>
+
             <button class="btn btn-primary w-100 mb-2" onclick="comando('desligar')">DESLIGAR</button>
             <button class="btn btn-primary w-100 mb-2" onclick="comando('reboot')">REINICIAR</button>
             <button class="btn btn-info w-100 mb-2" onclick="acessarVNC()">VNC</button>
@@ -112,7 +117,6 @@ uasort($setores, function($a, $b) {
 <script>
     let selecionado = null;
 
-    // Tenta redimensionar a janela se for PWA
     if (window.matchMedia('(display-mode: standalone)').matches) {
         window.resizeTo(1100, 750);
     }
@@ -135,7 +139,7 @@ uasort($setores, function($a, $b) {
 
     $(document).ready(function() {
         verificarStatus();
-        setInterval(verificarStatus, 15000); // 15s para não sobrecarregar
+        setInterval(verificarStatus, 15000);
     });
 
     function gerarSenha(sel) {
