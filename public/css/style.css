@@ -8,8 +8,18 @@
     transition: 0.3s;
 }
 
-.btn-primary { background-color: #00ff40 !important; } /* verdi Online */
-.btn-secondary { background-color: #ff0000 !important; } /* vermei Offline */
+/* public/css/style.css */
+.btn-online { 
+    background-color: #00ff40 !important; 
+    color: #000 !important; /* Texto preto para melhor contraste no verde */
+    border-color: #008020 !important;
+}
+
+.btn-offline { 
+    background-color: #ff0000 !important; 
+    color: #fff !important; 
+    border-color: #800000 !important;
+}
 
 aside button {
     font-weight: bold;

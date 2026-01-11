@@ -7,11 +7,12 @@ function atualizarGrid() {
         const ip = btn.data('ip');
 
         $.get('check_status.php?ip=' + ip, function(status) {
-            
             if (status.trim() === 'online') {
-                btn.removeClass('btn-secondary').addClass('btn-primary'); // Verde se online
+                // Remove as classes antigas e adiciona a nova de online
+                btn.removeClass('btn-secondary btn-offline').addClass('btn-online'); 
             } else {
-                btn.removeClass('btn-primary').addClass('btn-secondary'); // Vermelho se offline
+                // Remove as classes antigas e adiciona a nova de offline
+                btn.removeClass('btn-primary btn-online').addClass('btn-offline'); 
             }
         });
     });
