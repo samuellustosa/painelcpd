@@ -29,6 +29,7 @@ uasort($setores, function($a, $b) {
 <head>
     <meta charset="UTF-8">
     <title>Painel CPD</title>
+    <link rel="icon" type="image/png" href="images/logopainel.ico">
     <link rel="manifest" href="manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -71,7 +72,7 @@ uasort($setores, function($a, $b) {
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 grid-pdv">
-            <div class="header-red">Painel CPD - Grupo Mateus</div>
+            <div class="header-red">Painel CPD</div>
             
             <?php if (!empty($setores)): ?>
                 <?php foreach ($setores as $nome_setor => $caixas): ?>
