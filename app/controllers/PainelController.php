@@ -4,6 +4,11 @@ namespace App\Controllers;
 use App\Models\Terminal;
 
 class PainelController {
+
+
+    private $cracha_fiscal = "427605"; 
+    private $senha_fiscal  = "1212";
+
     public function acao($id_caixa, $ip, $arquitetura, $tipo_comando) {
         $terminal = new Terminal();
         
@@ -38,5 +43,16 @@ class PainelController {
             ]
         ];
         return $comandos[$arq][$acao];
+    }
+
+
+
+    public function fecharFiscalAutomático($ip) {
+        // Aqui entrará a lógica com o php-webdriver
+        // 1. Acessar http://[IP]:9898/normal.html
+        // 2. Enviar ESC, esperar 1s, digitar 112 + TAB
+        // 3. Inserir $this->cracha_fiscal e $this->senha_fiscal
+        // 4. Pressionar Enter
+        return "Processando fechamento no IP: $ip";
     }
 }

@@ -4,9 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdfabe774bbbe86d7ea2d09b36c1daed0
+class ComposerStaticInit2a2ec1608d0a402145d15042e7021325
 {
     public static $files = array (
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '2a3c2110e8e0295330dc3d11a4cbc4cb' => __DIR__ . '/..' . '/php-webdriver/webdriver/lib/Exception/TimeoutException.php',
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
     );
 
@@ -15,9 +17,18 @@ class ComposerStaticInitdfabe774bbbe86d7ea2d09b36c1daed0
         array (
             'phpseclib3\\' => 11,
         ),
+        'S' =>
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Component\\Process\\' => 26,
+        ),
         'P' =>
         array (
             'ParagonIE\\ConstantTime\\' => 23,
+        ),
+        'F' =>
+        array (
+            'Facebook\\WebDriver\\' => 19,
         ),
         'A' =>
         array (
@@ -30,9 +41,21 @@ class ComposerStaticInitdfabe774bbbe86d7ea2d09b36c1daed0
         array (
             0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
         ),
+        'Symfony\\Polyfill\\Mbstring\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Component\\Process\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/process',
+        ),
         'ParagonIE\\ConstantTime\\' =>
         array (
             0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
+        ),
+        'Facebook\\WebDriver\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/php-webdriver/webdriver/lib',
         ),
         'App\\' =>
         array (
@@ -47,9 +70,9 @@ class ComposerStaticInitdfabe774bbbe86d7ea2d09b36c1daed0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdfabe774bbbe86d7ea2d09b36c1daed0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdfabe774bbbe86d7ea2d09b36c1daed0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdfabe774bbbe86d7ea2d09b36c1daed0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2a2ec1608d0a402145d15042e7021325::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2a2ec1608d0a402145d15042e7021325::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2a2ec1608d0a402145d15042e7021325::$classMap;
 
         }, null, ClassLoader::class);
     }
