@@ -4,10 +4,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\WebDriverBy;
-use Facebook\WebDriver\WebDriverKeys;
-use Facebook\WebDriver\Chrome\ChromeOptions; // Importado para performance
+use Facebook\WebDriver\Chrome\ChromeOptions;
 
+// Recebe dados do formulário ou usa os padrões do PainelController
 $ip = $_POST['ip'] ?? null;
+$cracha = $_POST['cracha'] ?? "427605";
+$senha  = $_POST['senha'] ?? "1212";
 
 if (!$ip) {
     die(json_encode(['status' => 'erro', 'mensagem' => 'IP não fornecido.']));
@@ -17,55 +19,47 @@ $urlPdv = "http://{$ip}:9898/normal.html";
 $host = 'http://localhost:4444'; 
 $capabilities = DesiredCapabilities::chrome();
 
-// Otimização de performance para o CPD
 $options = new ChromeOptions();
-$options->addArguments(['--headless']); // Roda sem abrir janela para ser mais rápido
+$options->addArguments(['--headless', '--no-sandbox', '--disable-dev-shm-usage']); 
 $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
 
 try {
     $driver = RemoteWebDriver::create($host, $capabilities);
     $driver->get($urlPdv);
 
-    // --- LÓGICA DE INTELIGÊNCIA ---
-    // Captura todo o texto visível na tela do PDV
-    $corpoPagina = $driver->findElement(WebDriverBy::tagName('body'))->getText();
-    $textoTela = strtoupper($corpoPagina); // Converte para maiúsculo para facilitar a busca
+    // Lendo a variável situacao: 3 = Vendendo, 4 = Recebendo
+    $situacao = $driver->executeScript("return vue.data.situacao;");
 
-    // Lista de palavras que indicam que o caixa está ocupado
-    $palavrasBloqueio = ['VENDA', 'ITEM', 'TOTAL', 'SUBTOTAL', 'CUPOM'];
-
-    foreach ($palavrasBloqueio as $palavra) {
-        if (strpos($textoTela, $palavra) !== false) {
-            $driver->quit();
-            die(json_encode([
-                'status' => 'pulado', 
-                'mensagem' => "PDV $ip pulado: O caixa parece estar em operação (Venda Detectada)."
-            ]));
-        }
+    if ($situacao == 3 || $situacao == 4) {
+        $driver->quit();
+        die(json_encode([
+            'status' => 'pulado', 
+            'mensagem' => "PDV $ip ignorado: Existe uma venda em andamento (Status: $situacao)."
+        ]));
     }
-    // ------------------------------
 
-    // Se passou pela verificação, inicia os comandos
-    // 1. Limpeza inicial
-    $driver->getKeyboard()->sendKeys(WebDriverKeys::ESCAPE);
+    
+    // Limpa qualquer tela aberta com ESC
+    $driver->executeScript("pdv.putCmd('{ESC}');");
     sleep(1); 
 
-    // 2. Aciona a Função: 112 + TAB
-    $driver->getKeyboard()->sendKeys("112");
-    $driver->getKeyboard()->sendKeys(WebDriverKeys::TAB);
+    // Limpa qualquer tela aberta com ESC
+    $driver->executeScript("pdv.putCmd('{ESC}');");
+    sleep(2); 
+
+
+    // Envia 112 + TAB (O comando de TAB  é {99991})
+    $driver->executeScript("pdv.putCmd('112{99991}');");
     sleep(1); 
 
-    // 3. Login Fiscal: Crachá + ENTER
-    // Lembre-se de colocar seus dados reais aqui amanhã na empresa
-    $driver->getKeyboard()->sendKeys("SEU_CRACHA_AQUI");
-    $driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);
+    // Envia o Crachá + ENTER
+    $driver->executeScript("pdv.putCmd('{$cracha}{ENTER}');");
     sleep(1); 
 
-    // 4. Senha Fiscal: Senha + ENTER
-    $driver->getKeyboard()->sendKeys("SUA_SENHA_AQUI");
-    $driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);
+    // Envia a Senha + ENTER
+    $driver->executeScript("pdv.putCmd('{$senha}{ENTER}');");
 
-    echo json_encode(['status' => 'sucesso', 'mensagem' => "PDV $ip: Fechamento iniciado com sucesso."]);
+    echo json_encode(['status' => 'sucesso', 'mensagem' => "PDV $ip: Comando enviado."]);
 
 } catch (Exception $e) {
     echo json_encode(['status' => 'erro', 'mensagem' => "Erro no PDV $ip: " . $e->getMessage()]);

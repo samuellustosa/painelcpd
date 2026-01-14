@@ -11,7 +11,7 @@ $terminais = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fechamento Automático - Painel CPD</title>
+    <title>Fechamento Automático</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
@@ -40,7 +40,7 @@ $terminais = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="header-title">
             <h2 class="mb-0">Fechamento PDV</h2>
-            <small class="text-muted">Execução Automática da Função 112</small>
+            <small class="texT">OBS: NÃO COLOQUE PARA FECHAMENTO PDV'S EM VENDA, PRIORIZE O FECHAMENTO DEPOIS QUE TUDO FINALIZAR.</small>
         </div>
         <a href="index.php" class="btn btn-outline-secondary btn-sm">Voltar ao Painel</a>
     </div>
@@ -48,7 +48,7 @@ $terminais = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div id="status-container" class="mb-4" style="display:none;">
         <div class="d-flex justify-content-between mb-1">
             <span id="status-texto" class="small text-danger fw-bold">Processando...</span>
-            <span id="status-porcentagem" class="small text-muted">0%</span>
+            <span id="status-porcentagem" class="small text">0%</span>
         </div>
         <div class="progress">
             <div id="barra" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" style="width: 0%"></div>
@@ -84,9 +84,9 @@ $terminais = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <input type="checkbox" class="form-check-input check-pdv" value="<?= $pdv['ip_address'] ?>" data-caixa="<?= $pdv['id_caixa'] ?>">
                     </td>
                     <td><strong>PDV <?= str_pad($pdv['id_caixa'], 2, '0', STR_PAD_LEFT) ?></strong></td>
-                    <td><code class="text-muted"><?= $pdv['ip_address'] ?></code></td>
+                    <td><code class="text"><?= $pdv['ip_address'] ?></code></td>
                     <td class="status-col">
-                        <span class="text-muted small italic"><i class="fas fa-clock me-1"></i> Aguardando...</span>
+                        <span class="text italic"><i class="fas fa-clock me-1"></i> Aguardando...</span>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -154,7 +154,7 @@ $terminais = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
             }
 
-            Swal.fire('Concluído', 'O robô finalizou a fila de fechamento.', 'success');
+            Swal.fire('Concluído', 'fila de fechamento finalizada.', 'success');
             $('#status-container').hide();
         }
     </script>

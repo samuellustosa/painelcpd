@@ -54,8 +54,8 @@ uasort($setores, function($a, $b) {
 
         /* PDVs Compactos para caber tudo */
         .pdv-btn { 
-            width: 82px; height: 52px; margin: 3px; font-weight: bold; font-size: 11px; 
-            transition: 0.2s; cursor: pointer; border-radius: 6px; border: 1px solid #333;
+            width: 92px; height: 72px; margin: 3px; font-weight: bold; font-size: 11px; 
+            transition: 0.2s; cursor: pointer; border-radius: 6px; border: 1px solid #333; 
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             background-color: #333; color: #fff;
         }
@@ -63,7 +63,7 @@ uasort($setores, function($a, $b) {
         .btn-online { background-color: #2e7d32 !important; color: #fff !important; border-color: #1b5e20 !important; }
         .btn-offline { background-color: #c62828 !important; color: #fff !important; border-color: #8e0000 !important; }
         
-        .selecionado { border: 3px solid #fff !important; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
+        .selecionado { border: 3px solid #fff !important; box-shadow: 0 0 8px rgba(255,255,255,0.5); } 
 
         .sidebar .btn { font-size: 12px; font-weight: bold; padding: 8px 5px; }
     </style>
@@ -87,7 +87,7 @@ uasort($setores, function($a, $b) {
                                     data-ip="<?= $pdv['ip_address'] ?>"
                                     data-arq="<?= $pdv['arquitetura'] ?>">
                                 <span>PDV <?= str_pad($pdv['id_caixa'], 2, '0', STR_PAD_LEFT) ?></span>
-                                <small style="font-size: 9px; opacity: 0.7;"><?= $pdv['arquitetura'] ?></small>
+                                <small style="font-size: 9px; opacity: 0.7;"><?= $pdv['arquitetura'] ?></small> 
                             </button>
                         <?php endforeach; ?>
                     </div>
@@ -96,9 +96,10 @@ uasort($setores, function($a, $b) {
         </div>
 
         <div class="sidebar text-center">
-            <a href="fechamento.php" class="btn btn-warning w-100 mb-4 fw-bold text-dark">
+            <a href="fechamento.php" class="btn btn-warning w-100 mb-4 fw-bold text-white">
                 <i class="fas fa-robot me-1"></i> FECHAMENTO
             </a>
+
 
             <button class="btn btn-primary w-100 mb-2" onclick="comando('desligar')">DESLIGAR</button>
             <button class="btn btn-primary w-100 mb-2" onclick="comando('reboot')">REINICIAR</button>
@@ -109,6 +110,8 @@ uasort($setores, function($a, $b) {
             <div class="mt-4">
                 <img src="images/logo.jpg" style="max-width: 90%; border-radius: 4px; filter: grayscale(20%);">
             </div>
+
+        
         </div>
     </div>
 </div>
@@ -194,7 +197,7 @@ uasort($setores, function($a, $b) {
                         icon: (data.status === 'sucesso') ? 'success' : 'error'
                     });
                 }, 'json').fail(function() {
-                    Swal.fire('Erro', 'Falha na comunicação com o servidor.', 'error');
+                    Swal.fire('Erro', 'Falha na comunicação.', 'error');
                 });
             }
         });
