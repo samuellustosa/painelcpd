@@ -96,8 +96,8 @@ uasort($setores, function($a, $b) {
         </div>
 
         <div class="sidebar text-center">
-            <a href="" class="btn btn-warning w-100 mb-4 fw-bold text-white">
-                <i class="fas fa-robot me-1"></i> EM MANUTENÇÃO
+            <a href="fechamento.php" class="btn btn-warning w-100 mb-4 fw-bold text-white">
+                <i class="fas fa-robot me-1"></i> FECHAMENTO
             </a>
 
 
