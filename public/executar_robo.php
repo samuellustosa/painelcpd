@@ -41,20 +41,23 @@ try {
     
     // Limpa qualquer tela aberta com ESC
     $driver->executeScript("pdv.putCmd('{ESC}');");
-    sleep(1); 
+    sleep(3); 
+
+    $driver->executeScript("pdv.putCmd('{ESC}');");
+    sleep(3); 
 
     // Limpa qualquer tela aberta com ESC
     $driver->executeScript("pdv.putCmd('{ESC}');");
-    sleep(2); 
+    sleep(4); 
 
 
     // Envia 112 + TAB (O comando de TAB  é {99991})
     $driver->executeScript("pdv.putCmd('112{99991}');");
-    sleep(1); 
+    sleep(2); 
 
     // Envia o Crachá + ENTER
     $driver->executeScript("pdv.putCmd('{$cracha}{ENTER}');");
-    sleep(1); 
+    sleep(2); 
 
     // Envia a Senha + ENTER
     $driver->executeScript("pdv.putCmd('{$senha}{ENTER}');");

@@ -35,7 +35,7 @@ class PainelController {
                 'desligar'      => 'poweroff'                  
             ],
             'x64' => [
-                'reiniciar_app' => 'systemctl restart webpdv', 
+                'reiniciar_app' => 'sudo it-restart-application.sh', 
                 'reboot'        => 'sudo init 6',              
                 'desligar'      => 'sudo shutdown -h now'     
             ]

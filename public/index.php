@@ -61,7 +61,7 @@ uasort($setores, function($a, $b) {
         }
 
         .btn-online { background-color: #2e7d32 !important; color: #fff !important; border-color: #1b5e20 !important; }
-        .btn-offline { background-color: #c62828 !important; color: #fff !important; border-color: #8e0000 !important; }
+        .btn-offline { background-color: #c90707 !important; color: #fff !important; border-color: #8e0000 !important; }
         
         .selecionado { border: 3px solid #fff !important; box-shadow: 0 0 8px rgba(255,255,255,0.5); } 
 
@@ -96,8 +96,8 @@ uasort($setores, function($a, $b) {
         </div>
 
         <div class="sidebar text-center">
-            <a href="fechamento.php" class="btn btn-warning w-100 mb-4 fw-bold text-white">
-                <i class="fas fa-robot me-1"></i> FECHAMENTO
+            <a href="" class="btn btn-warning w-100 mb-4 fw-bold text-white">
+                <i class="fas fa-robot me-1"></i> EM MANUTENÇÃO
             </a>
 
 
