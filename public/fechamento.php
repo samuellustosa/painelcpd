@@ -51,7 +51,7 @@ $terminais = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="header-title">
             <h2 class="mb-0 text-uppercase fw-bold">Automação de Fechamento</h2>
-            <small class="text-warning"><i class="fas fa-exclamation-triangle me-1"></i> Verifique se os PDVs não possuem vendas em andamento antes de iniciar.</small>
+            <small class="text-warning"><i class="fas fa-exclamation-triangle me-1"></i> Verifique se os PDVs não possuem vendas em andamento antes de iniciar. CUIDADO MESMO!!! PASSA ITENS NA COMPRA DE CLIENTES.</small>
         </div>
         <a href="index.php" class="btn btn-outline-light btn-sm"><i class="fas fa-arrow-left me-2"></i>VOLTAR</a>
     </div>

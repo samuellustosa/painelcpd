@@ -73,7 +73,12 @@ uasort($setores, function($a, $b) {
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 grid-pdv">
-            <div class="header-red">Painel CPD</div>
+            <div class="header-red ">Painel CPD</div>
+            <div class="container text-center mb-4 pt-2">
+                <a href="comousar.php" class="btn btn-outline-warning btn-sm shadow-sm">
+                    <i class="bi bi-question-circle"></i> Como Usar o Sistema
+                </a>
+            </div>
             
             <?php if (!empty($setores)): ?>
                 <?php foreach ($setores as $nome_setor => $caixas): ?>
@@ -142,7 +147,7 @@ uasort($setores, function($a, $b) {
 
     $(document).ready(function() {
         verificarStatus();
-        setInterval(verificarStatus, 15000);
+        setInterval(verificarStatus, 15000); //15 seg
     });
 
     function gerarSenha(sel) {

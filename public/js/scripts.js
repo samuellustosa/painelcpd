@@ -1,6 +1,5 @@
 let pdvSelecionado = null;
 
-
 function atualizarGrid() {
     $('.pdv-box').each(function() {
         const btn = $(this);
@@ -8,10 +7,8 @@ function atualizarGrid() {
 
         $.get('check_status.php?ip=' + ip, function(status) {
             if (status.trim() === 'online') {
-                // Remove as classes antigas e adiciona a nova de online
                 btn.removeClass('btn-secondary btn-offline').addClass('btn-online'); 
             } else {
-                // Remove as classes antigas e adiciona a nova de offline
                 btn.removeClass('btn-primary btn-online').addClass('btn-offline'); 
             }
         });
@@ -37,7 +34,3 @@ function comando(tipo) {
     }, 'json');
 }
 
-$(document).ready(function() {
-    atualizarGrid();
-    setInterval(atualizarGrid, 30000); 
-});

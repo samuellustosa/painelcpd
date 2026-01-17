@@ -55,7 +55,7 @@ try {
     }
 
     // Pausa curta de 1 segundo entre a limpeza e o início dos fechamentos
-    sleep(1);
+    sleep(2);
 
     /**
      * FASE 2: FECHAMENTO REAL
@@ -75,7 +75,7 @@ try {
 
             // Sequência de login e comando de fechamento (112)
             $driver->executeScript("pdv.putCmd('112{99991}');"); // 112 + TAB
-            sleep(1);
+            sleep(2);
             $driver->executeScript("pdv.putCmd('{$cracha}{ENTER}');");
             sleep(1);
             $driver->executeScript("pdv.putCmd('{$senha}{ENTER}');");
