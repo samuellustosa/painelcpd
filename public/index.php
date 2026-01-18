@@ -75,9 +75,17 @@ uasort($setores, function($a, $b) {
         <div class="col-12 grid-pdv">
             <div class="header-red ">Painel CPD</div>
             <div class="container text-center mb-4 pt-2">
-                <a href="comousar.php" class="btn btn-outline-warning btn-sm shadow-sm">
-                    <i class="bi bi-question-circle"></i> Como Usar o Sistema
-                </a>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    
+                    <a href="comousar.php" class="btn btn-outline-warning btn-sm shadow-sm">
+                        <i class="bi bi-question-circle"></i> Como Usar
+                    </a>
+
+                    <a href="" class="btn btn-outline-secondary btn-sm shadow-sm">
+                        <i class="bi bi-person"></i> Gestão PDV, BALANÇAS e DESKTOPS
+                    </a>
+                    
+                </div>
             </div>
             
             <?php if (!empty($setores)): ?>
