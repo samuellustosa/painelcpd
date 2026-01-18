@@ -129,16 +129,31 @@ function renderPlanilha($itens) {
     function confirmarLimpeza(id) {
         Swal.fire({
             title: 'Confirmar?',
-            text: "Deseja atualizar a data de limpeza para hoje?",
-            icon: 'warning',
+            text: "O equipamento foi higienizado hoje?",
+            icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#2e7d32',
             confirmButtonText: 'Sim, atualizado!',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Aqui você integrará com o script de salvar no banco
-                Swal.fire('OK!', 'Data de limpeza atualizada no sistema.', 'success');
+                // Envia o ID para o banco de dados via AJAX
+                $.post('atualizar_limpeza.php', { id: id }, function(response) {
+                    if (response.status === 'sucesso') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sucesso',
+                            text: response.mensagem,
+                            showConfirmButton: false,
+                            timer: 1000
+                        });
+                        
+                        // Recarrega a página para o cálculo do PHP mudar a cor para VERDE
+                        setTimeout(() => { location.reload(); }, 1000);
+                    } else {
+                        Swal.fire('Erro', 'Erro ao gravar: ' + response.mensagem, 'error');
+                    }
+                }, 'json');
             }
         });
     }
