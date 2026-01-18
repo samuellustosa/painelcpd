@@ -81,7 +81,7 @@ uasort($setores, function($a, $b) {
                         <i class="bi bi-question-circle"></i> Como Usar
                     </a>
 
-                    <a href="" class="btn btn-outline-secondary btn-sm shadow-sm">
+                    <a href="gestao_limpeza.php" class="btn btn-outline-secondary btn-sm shadow-sm">
                         <i class="bi bi-person"></i> Gestão PDV, BALANÇAS e DESKTOPS
                     </a>
                     
